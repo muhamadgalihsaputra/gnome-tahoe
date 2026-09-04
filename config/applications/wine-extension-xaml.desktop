@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Windows Presentation Foundation Host
-MimeType=application/xaml+xml;
-Exec=env WINEPREFIX="@HOME@/Games/Heroic/Prefixes/default/PES Blue Lock/drive_c/Games/Pro Evolution Soccer 2017" wine start /ProgIDOpen Windows.XamlDocument %f
-NoDisplay=true
-StartupNotify=true
-Icon=0637_PresentationHost.0

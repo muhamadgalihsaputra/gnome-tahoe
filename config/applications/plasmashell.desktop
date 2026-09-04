@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Plasma Shell
-Exec=plasmashell
-Type=Application
-NoDisplay=true
-StartupWMClass=plasmashell
-

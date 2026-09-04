@@ -96,24 +96,14 @@ dconf dump /org/gnome/desktop/wm/preferences/ | sed "s|$HOME|@HOME@|g" > "$DESKT
 dconf dump /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/custom-keybindings.ini"
 dconf dump /org/gnome/settings-daemon/plugins/media-keys/ | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/media-keys.ini"
 
-# 4. Backup Flatpak list
-if command -v flatpak >/dev/null 2>&1; then
-    echo "Backing up Flatpak list..."
-    {
-        echo "# Flathub applications"
-        echo
-        flatpak list --app --columns=application
-    } > "$REPO_ROOT/flatpak.txt"
-fi
-
-# 5. Backup & Merge Wallpapers
+# 4. Backup & Merge Wallpapers
 if [[ -d "$HOME/Pictures/Wallpapers" ]]; then
     echo "Merging wallpapers from ~/Pictures/Wallpapers to repo..."
     mkdir -p "$REPO_ROOT/wallpapers/images"
     cp -rn "$HOME/Pictures/Wallpapers/"* "$REPO_ROOT/wallpapers/images/" 2>/dev/null || true
 fi
 
-# 6. Backup theme info
+# 5. Backup theme info
 THEME_FILE="$REPO_ROOT/theme/settings.ini"
 mkdir -p "$REPO_ROOT/theme"
 {
@@ -126,34 +116,6 @@ mkdir -p "$REPO_ROOT/theme"
     printf 'color-scheme=%s\n' "$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | tr -d "'")"
     printf 'button-layout=%s\n' "$(gsettings get org.gnome.desktop.wm.preferences button-layout 2>/dev/null | tr -d "'")"
 } > "$THEME_FILE"
-
-# 7. Backup custom application launchers
-if [[ -d "$HOME/.local/share/applications" ]]; then
-    echo "Backing up custom desktop application launchers..."
-    mkdir -p "$REPO_ROOT/config/applications"
-    for f in "$HOME/.local/share/applications"/*.desktop; do
-        [ -f "$f" ] || continue
-        sed "s|$HOME|@HOME@|g" "$f" > "$REPO_ROOT/config/applications/$(basename "$f")"
-    done
-fi
-
-# 8. Backup custom app icons (PNG and SVG only)
-if [[ -d "$HOME/.local/share/icons" ]]; then
-    echo "Backing up custom app icons..."
-    mkdir -p "$REPO_ROOT/config/icons"
-    cp "$HOME/.local/share/icons"/*.png "$HOME/.local/share/icons"/*.svg "$REPO_ROOT/config/icons/" 2>/dev/null || true
-fi
-
-# 9. Backup user desktop scripts
-if [[ -d "$HOME/scripts" ]]; then
-    echo "Backing up user desktop scripts..."
-    mkdir -p "$REPO_ROOT/config/scripts"
-    for f in "$HOME/scripts"/*.sh; do
-        [ -f "$f" ] || continue
-        sed "s|$HOME|@HOME@|g" "$f" > "$REPO_ROOT/config/scripts/$(basename "$f")"
-        chmod +x "$REPO_ROOT/config/scripts/$(basename "$f")"
-    done
-fi
 
 echo
 echo "Backup completed successfully."

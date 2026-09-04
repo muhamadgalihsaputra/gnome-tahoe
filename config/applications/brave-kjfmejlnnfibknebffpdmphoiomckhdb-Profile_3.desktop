@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Terminal=false
-Type=Application
-Name=Gemini Notebook
-Exec=/opt/brave.com/brave-origin-nightly/brave-origin-nightly "--profile-directory=Profile 3" --app-id=kjfmejlnnfibknebffpdmphoiomckhdb
-Icon=brave-kjfmejlnnfibknebffpdmphoiomckhdb-Profile_3
-StartupWMClass=crx_kjfmejlnnfibknebffpdmphoiomckhdb

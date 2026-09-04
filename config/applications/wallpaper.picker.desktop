@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=HyprQuickPaper GNOME
-Comment=Fast wallpaper selector for GNOME
-Exec=@HOME@/.local/share/hyprquickpaper-gnome/app.py
-Icon=preferences-desktop-wallpaper
-Terminal=false
-Type=Application
-Categories=Utility;Settings;DesktopSettings;
-StartupWMClass=wallpaper.picker

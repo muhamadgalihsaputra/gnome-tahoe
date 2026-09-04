@@ -31,35 +31,6 @@ if [[ -d "$REPO_ROOT/wallpapers/images" ]]; then
     cp -rn "$REPO_ROOT/wallpapers/images/"* "$HOME/Pictures/Wallpapers/" 2>/dev/null || true
 fi
 
-if [[ -d "$REPO_ROOT/config/applications" ]]; then
-    echo
-    echo "==> Deploying custom application launchers to ~/.local/share/applications..."
-    mkdir -p "$HOME/.local/share/applications"
-    for f in "$REPO_ROOT/config/applications"/*.desktop; do
-        [ -f "$f" ] || continue
-        sed "s|@HOME@|$HOME|g" "$f" > "$HOME/.local/share/applications/$(basename "$f")"
-    done
-    command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$HOME/.local/share/applications" || true
-fi
-
-if [[ -d "$REPO_ROOT/config/icons" ]]; then
-    echo
-    echo "==> Deploying custom app icons to ~/.local/share/icons..."
-    mkdir -p "$HOME/.local/share/icons"
-    cp -rn "$REPO_ROOT/config/icons/"* "$HOME/.local/share/icons/" 2>/dev/null || true
-fi
-
-if [[ -d "$REPO_ROOT/config/scripts" ]]; then
-    echo
-    echo "==> Deploying user desktop scripts to ~/scripts..."
-    mkdir -p "$HOME/scripts"
-    for f in "$REPO_ROOT/config/scripts"/*.sh; do
-        [ -f "$f" ] || continue
-        sed "s|@HOME@|$HOME|g" "$f" > "$HOME/scripts/$(basename "$f")"
-        chmod +x "$HOME/scripts/$(basename "$f")"
-    done
-fi
-
 echo
 echo "==> Applying GNOME desktop and extension configurations..."
 "$REPO_ROOT/scripts/dconf.sh" all

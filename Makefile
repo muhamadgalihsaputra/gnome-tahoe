@@ -1,4 +1,4 @@
-.PHONY: install backup install-extensions dconf packages flatpak uninstall
+.PHONY: install backup install-extensions dconf packages uninstall
 
 install:
 	./scripts/install.sh
@@ -15,8 +15,6 @@ dconf:
 packages:
 	./scripts/packages.sh
 
-flatpak:
-	./scripts/flatpak.sh
-
 uninstall:
 	./scripts/uninstall.sh
+
