@@ -1,91 +1,65 @@
-# Solid Shadow
+# Solid Shadow — Personal GNOME Rice
 
-Personal Fedora GNOME dotfiles focused on desktop customization, shell configuration, development tools, themes, and GNOME extension settings.
-## Theme
+Personal CachyOS (Arch Linux) GNOME dotfiles and desktop rice configuration focused on modern macOS-inspired ergonomics, modular top bar islands, shell customizations, and automated dconf backup routines.
 
+## Overview & Highlights
+
+- **Desktop Shell:** GNOME 50 (Wayland) with `MacTahoe-Dark` styling and San Francisco typography (`SF Pro Display` & `SF Mono`).
+- **Top Panel:** Floating pill capsules (`Islands`) with dark translucent background, border outline, and solid drop shadow via OpenBar.
+- **Widgets:**
+  - Dynamic Music Pill with live audio visualizer and playback controls.
+  - Rain Clock desktop clock widget with customizable typography.
+  - Search Light (macOS Spotlight-style floating application search).
+- **Window Management & FX:**
+  - Compiz wobbly windows & Magic Lamp (Genie) minimize effects.
+  - CoverflowAltTab & 3D Desktop Cube.
+  - Tiling support with Forge and Tiling Assistant.
+- **Custom Tooling:**
+  - [HyprQuickPaper GNOME](https://github.com/muhamadgalihsaputra/hyprquickpaper-gnome) wallpaper picker (`<Super><Alt>w`).
+  - Terminal: Ghostty with SF Mono.
+  - Shell: Zsh with Powerlevel10k and Fastfetch system branding.
+
+## Screenshots
 
 | | |
 |---|---|
 | ![Desktop 01](asserts/screenshots/desktop/desktop-01.png) | ![Desktop 02](asserts/screenshots/desktop/desktop-02.png) |
 | ![Desktop 03](asserts/screenshots/desktop/desktop-03.png) | ![Desktop 04](asserts/screenshots/desktop/desktop-04.png) |
-| ![Desktop 05](asserts/screenshots/desktop/desktop-05.png) | ![Desktop 06](asserts/screenshots/desktop/desktop-06.png) |
-
-### Applications
-
-| | |
-|---|---|
 | ![Application 01](asserts/screenshots/application/application-01.png) | ![Application 02](asserts/screenshots/application/application-02.png) |
-| ![Application 03](asserts/screenshots/application/application-03.png) | ![Application 04](asserts/screenshots/application/application-04.png) |
-
-### Extensions
-
-| | |
-|---|---|
-| ![Extension 01](asserts/screenshots/extensions/extensions-01.png) | ![Extension 02](asserts/screenshots/extensions/extensions-02.png) |
-| ![Extension 03](asserts/screenshots/extensions/extensions-03.png) | ![Extension 04](asserts/screenshots/extensions/extensions-04.png) |
 
 ## Documentation
 
-- [Theme](theme/THEME.md)
+- [Theme & Typography](theme/THEME.md)
 - [GNOME Extensions](gnome/EXTENSIONS.md)
 - [Wallpapers](wallpapers/WALLPAPERS.md)
 
-> [!WARNING]
-> **Experimental Project**
->
-> This repository is experimental and intended for personal use. The included scripts may modify system and user configuration, install packages, alter GNOME settings, and change the desktop environment.
->
-> Use these dotfiles at your own risk. **I take no responsibility for data loss, system damage, configuration issues, broken packages, or any other consequences resulting from the use of this repository.**
->
-> Make sure you understand what each script does before executing it and keep a backup of any important data and configuration.
+## Usage & Installation
 
-## Installation
-
-Install the GNOME extensions:
-
-> [!IMPORTANT]
->
-> After running `make install-extensions`, you **must end your current GNOME session and log in again** for newly installed extensions to be loaded by GNOME Shell.
-
-```bash
-make install-extensions
-```
-
-The default installation creates a backup and applies the tracked GNOME extension settings:
-
-```bash
-make install
-```
-
-Create a manual backup:
-
-```bash
-make backup
-```
-
-Apply the extension settings directly:
-
-```bash
-make dconf
-```
-
-Install the packages listed in `packages.txt`:
-
+### 1. Install Packages (Arch / CachyOS)
 ```bash
 make packages
 ```
 
-Install the Flatpak applications listed in `flatpak.txt`:
-
+### 2. Install GNOME Extensions
 ```bash
-make flatpak
+make install-extensions
+```
+> [!IMPORTANT]
+> Log out and log back in to your GNOME session after installing extensions.
+
+### 3. Deploy Dotfiles & Apply Settings
+Deploys configuration files to `~/.config` and applies all tracked GNOME desktop & extension settings via dconf:
+```bash
+make install
 ```
 
-Run the uninstall routine:
-
+### 4. Backup Current System State
+Dumps active GNOME configurations and dotfiles back into this repository:
 ```bash
-make uninstall
+make backup
 ```
 
-> [!WARNING]
-> It is recommended to end the session after any operation.
+### 5. Reapply Dconf Settings Only
+```bash
+make dconf
+```

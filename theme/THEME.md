@@ -1,21 +1,17 @@
 # Theme
 
-| Category    | Theme                |
-| ----------- | -------------------- |
-| GTK         | `WhiteSur-Dark-grey` |
-| Icons       | `WhiteSur-dark`      |
-| Cursor      | `Win11OSX`           |
-| Cursor Size | `32`                 |
+| Category | Value |
+| --- | --- |
+| **GTK Theme** | `MacTahoe-Dark` |
+| **Icon Theme** | `MacTahoe-dark` |
+| **Cursor Theme** | `MacTahoe-dark` |
+| **Cursor Size** | `24` |
+| **Interface Font** | `SF Pro Display Medium 11` |
+| **Monospace Font** | `SF Mono 10` |
+| **Color Scheme** | `prefer-dark` |
+| **Button Layout** | `close,minimize,maximize:` (macOS style left) |
 
-> [!NOTE]
-> **Manual Installation**
->
-> The GTK theme, icon theme, and cursor are **not installed automatically** by this repository.
->
-> Please install them manually using the links below before applying the theme configuration.
+## Details
 
-## Links
-
-* **GTK — WhiteSur:** https://github.com/vinceliuice/WhiteSur-gtk-theme
-* **Icons — WhiteSur:** https://github.com/vinceliuice/WhiteSur-icon-theme
-* **Cursor — Win11OSX:** https://www.opendesktop.org/p/2334253
+* **Theme & Icons:** MacTahoe-Dark (macOS Tahoe aesthetic for modern GNOME Shell & GTK).
+* **Typography:** Apple San Francisco fonts (SF Pro Display for UI, SF Mono for terminal and code).

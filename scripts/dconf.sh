@@ -3,28 +3,34 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-
 EXTENSIONS_DIR="$REPO_ROOT/gnome/dconf/extensions"
+DESKTOP_DIR="$REPO_ROOT/gnome/dconf/desktop"
 
 apply_extensions() {
     declare -A dconf_paths=(
-        ["user-theme@gnome-shell-extensions.gcampax.github.com"]="user-theme"
-        ["search-light@icedman.github.com"]="search-light"
-        ["gnome-ui-tune@itstime.tech"]="gnome-ui-tune"
-        ["just-perfection-desktop@just-perfection"]="just-perfection"
-        ["dash2dock-lite@icedman.github.com"]="dash2dock-lite"
-        ["openbar@neuromorph"]="openbar"
-        ["clipboard-indicator@tudmotu.com"]="clipboard-indicator"
-        ["quick-settings-avatar@d-go"]="quick-settings-avatar"
-        ["app-grid-tuner@m-lab"]="app-grid-tuner"
-        ["gTile@vibou"]="gtile"
-        ["Vitals@CoreCoding.com"]="vitals"
-        ["blur-my-shell@aunetx"]="blur-my-shell"
-        ["dynamic-music-pill@andbal"]="dynamic-music-pill"
-        ["pop-shell@system76.com"]="pop-shell"
-        ["bluetooth-battery-monitor@v8v88v8v88.com"]="bluetooth-battery-monitor"
-        ["rainclock@hugo-sants.github.com"]="rainclock"
-        ["background-logo@fedorahosted.org"]="background-logo"
+        ["openbar@neuromorph"]="/org/gnome/shell/extensions/openbar/"
+        ["dynamic-music-pill@andbal"]="/org/gnome/shell/extensions/dynamic-music-pill/"
+        ["rainclock@hugo-sants.github.com"]="/org/gnome/shell/extensions/rainclock/"
+        ["search-light@icedman.github.com"]="/org/gnome/shell/extensions/search-light/"
+        ["quick-settings-avatar@d-go"]="/org/gnome/shell/extensions/quick-settings-avatar/"
+        ["app-grid-tuner@m-lab"]="/org/gnome/shell/extensions/app-grid-tuner/"
+        ["blur-my-shell@aunetx"]="/org/gnome/shell/extensions/blur-my-shell/"
+        ["dash-to-dock@micxgx.gmail.com"]="/org/gnome/shell/extensions/dash-to-dock/"
+        ["space-bar@luchrioh"]="/org/gnome/shell/extensions/space-bar/"
+        ["just-perfection-desktop@just-perfection"]="/org/gnome/shell/extensions/just-perfection/"
+        ["Vitals@CoreCoding.com"]="/org/gnome/shell/extensions/vitals/"
+        ["logomenu@aryan_k"]="/org/gnome/shell/extensions/Logo-menu/"
+        ["compiz-windows-effect@hermes83.github.com"]="/org/gnome/shell/extensions/com/github/hermes83/compiz-windows-effect/"
+        ["desktop-cube@schneegans.github.com"]="/org/gnome/shell/extensions/desktop-cube/"
+        ["CoverflowAltTab@palatis.blogspot.com"]="/org/gnome/shell/extensions/coverflowalttab/"
+        ["forge@jmmaranan.com"]="/org/gnome/shell/extensions/forge/"
+        ["tiling-assistant@leleat-on-github"]="/org/gnome/shell/extensions/tiling-assistant/"
+        ["clipboard-indicator@tudmotu.com"]="/org/gnome/shell/extensions/clipboard-indicator/"
+        ["user-theme@gnome-shell-extensions.gcampax.github.com"]="/org/gnome/shell/extensions/user-theme/"
+        ["arch-update@RaphaelRochet"]="/org/gnome/shell/extensions/arch-update/"
+        ["caffeine@patapon.info"]="/org/gnome/shell/extensions/caffeine/"
+        ["gsconnect@andyholmes.github.io"]="/org/gnome/shell/extensions/gsconnect/"
+        ["gnome-ui-tune@itstime.tech"]="/org/gnome/shell/extensions/gnome-ui-tune/"
     )
 
     if ! command -v dconf >/dev/null 2>&1; then
@@ -33,42 +39,65 @@ apply_extensions() {
     fi
 
     if [[ ! -d "$EXTENSIONS_DIR" ]]; then
-        echo "Error: extension configuration directory not found:"
-        echo "  $EXTENSIONS_DIR"
+        echo "Error: extension configuration directory not found: $EXTENSIONS_DIR"
         exit 1
     fi
 
     for uuid in "${!dconf_paths[@]}"; do
         config="$EXTENSIONS_DIR/$uuid/config.ini"
-        dconf_name="${dconf_paths[$uuid]}"
-        dconf_path="/org/gnome/shell/extensions/$dconf_name/"
+        dconf_path="${dconf_paths[$uuid]}"
 
         if [[ ! -f "$config" ]]; then
-            echo "[SKIP] $uuid"
             continue
         fi
 
-        echo "[APPLY] $uuid"
-
+        echo "[APPLY EXTENSION] $uuid"
         dconf load "$dconf_path" < "$config"
     done
 }
 
-apply_all() {
-    echo "Optional full DConf restore is not enabled yet."
-    echo "Use:"
-    echo "  $0 extensions"
+apply_desktop() {
+    if [[ ! -d "$DESKTOP_DIR" ]]; then
+        return
+    fi
+
+    if [[ -f "$DESKTOP_DIR/interface.ini" ]]; then
+        echo "[APPLY DESKTOP] interface settings"
+        dconf load /org/gnome/desktop/interface/ < "$DESKTOP_DIR/interface.ini"
+    fi
+
+    if [[ -f "$DESKTOP_DIR/wm-preferences.ini" ]]; then
+        echo "[APPLY DESKTOP] window manager preferences"
+        dconf load /org/gnome/desktop/wm/preferences/ < "$DESKTOP_DIR/wm-preferences.ini"
+    fi
+
+    if [[ -f "$DESKTOP_DIR/custom-keybindings.ini" ]]; then
+        echo "[APPLY DESKTOP] custom keybindings"
+        dconf load /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ < "$DESKTOP_DIR/custom-keybindings.ini"
+    fi
+
+    if [[ -f "$DESKTOP_DIR/media-keys.ini" ]]; then
+        dconf load /org/gnome/settings-daemon/plugins/media-keys/ < "$DESKTOP_DIR/media-keys.ini"
+    fi
 }
 
-case "${1:-extensions}" in
+apply_all() {
+    apply_desktop
+    apply_extensions
+}
+
+case "${1:-all}" in
     extensions)
         apply_extensions
+        ;;
+    desktop)
+        apply_desktop
         ;;
     all)
         apply_all
         ;;
     *)
-        echo "Usage: $0 [extensions|all]"
+        echo "Usage: $0 [extensions|desktop|all]"
         exit 1
         ;;
 esac

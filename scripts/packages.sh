@@ -5,14 +5,19 @@ set -euo pipefail
 REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 PACKAGE_FILE="$REPO_ROOT/packages.txt"
 
-if ! command -v dnf >/dev/null 2>&1; then
-    echo "Error: DNF is required."
+if command -v paru >/dev/null 2>&1; then
+    AUR_HELPER="paru"
+elif command -v yay >/dev/null 2>&1; then
+    AUR_HELPER="yay"
+elif command -v pacman >/dev/null 2>&1; then
+    AUR_HELPER="sudo pacman"
+else
+    echo "Error: Neither paru, yay, nor pacman found."
     exit 1
 fi
 
 if [[ ! -f "$PACKAGE_FILE" ]]; then
-    echo "Error: packages.txt not found:"
-    echo "  $PACKAGE_FILE"
+    echo "Error: packages.txt not found: $PACKAGE_FILE"
     exit 1
 fi
 
@@ -25,8 +30,8 @@ if [[ "${#packages[@]}" -eq 0 ]]; then
     exit 0
 fi
 
-echo "Installing customization packages:"
+echo "Installing packages with $AUR_HELPER:"
 printf '  %s\n' "${packages[@]}"
 echo
 
-sudo dnf install -y "${packages[@]}"
+$AUR_HELPER -S --needed "${packages[@]}"

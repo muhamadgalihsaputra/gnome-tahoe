@@ -10,7 +10,7 @@ install-extensions:
 	./scripts/install-extensions.sh
 
 dconf:
-	./scripts/dconf.sh extensions
+	./scripts/dconf.sh all
 
 packages:
 	./scripts/packages.sh

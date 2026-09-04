@@ -3,119 +3,94 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-TIMESTAMP="$(date '+%Y-%m-%d_%H-%M-%S')"
-BACKUP_DIR="$REPO_ROOT/.backups/$TIMESTAMP"
 
-mkdir -p "$BACKUP_DIR"
-
-echo "Creating backup..."
-echo "Location: $BACKUP_DIR"
+echo "Backing up GNOME configuration and dotfiles..."
+echo "Destination: $REPO_ROOT"
 echo
 
-backup_file() {
-    local source="$1"
-    local destination="$2"
+# 1. Backup app configs
+mkdir -p "$REPO_ROOT/config/ghostty" \
+         "$REPO_ROOT/config/fastfetch" \
+         "$REPO_ROOT/config/btop" \
+         "$REPO_ROOT/config/cava" \
+         "$REPO_ROOT/config/zsh" \
+         "$REPO_ROOT/config/gtk-3.0" \
+         "$REPO_ROOT/config/gtk-4.0"
 
-    if [[ -f "$source" ]]; then
-        mkdir -p "$(dirname "$destination")"
-        cp -a "$source" "$destination"
-        echo "[BACKUP] $source"
-    fi
-}
+[[ -d "$HOME/.config/ghostty" ]] && cp -r "$HOME/.config/ghostty/"* "$REPO_ROOT/config/ghostty/" 2>/dev/null || true
+[[ -d "$HOME/.config/fastfetch" ]] && cp -r "$HOME/.config/fastfetch/"* "$REPO_ROOT/config/fastfetch/" 2>/dev/null || true
+[[ -d "$HOME/.config/btop" ]] && cp -r "$HOME/.config/btop/"* "$REPO_ROOT/config/btop/" 2>/dev/null || true
+[[ -d "$HOME/.config/cava" ]] && cp -r "$HOME/.config/cava/"* "$REPO_ROOT/config/cava/" 2>/dev/null || true
+[[ -d "$HOME/.config/gtk-3.0" ]] && cp -r "$HOME/.config/gtk-3.0/"* "$REPO_ROOT/config/gtk-3.0/" 2>/dev/null || true
+[[ -d "$HOME/.config/gtk-4.0" ]] && cp -r "$HOME/.config/gtk-4.0/"* "$REPO_ROOT/config/gtk-4.0/" 2>/dev/null || true
+[[ -f "$HOME/.zshrc" ]] && cp "$HOME/.zshrc" "$REPO_ROOT/config/zsh/.zshrc"
+[[ -f "$HOME/.p10k.zsh" ]] && cp "$HOME/.p10k.zsh" "$REPO_ROOT/config/zsh/.p10k.zsh"
 
-backup_dir() {
-    local source="$1"
-    local destination="$2"
+# 2. Backup dconf extensions
+declare -A dconf_paths=(
+    ["openbar@neuromorph"]="/org/gnome/shell/extensions/openbar/"
+    ["dynamic-music-pill@andbal"]="/org/gnome/shell/extensions/dynamic-music-pill/"
+    ["rainclock@hugo-sants.github.com"]="/org/gnome/shell/extensions/rainclock/"
+    ["search-light@icedman.github.com"]="/org/gnome/shell/extensions/search-light/"
+    ["quick-settings-avatar@d-go"]="/org/gnome/shell/extensions/quick-settings-avatar/"
+    ["app-grid-tuner@m-lab"]="/org/gnome/shell/extensions/app-grid-tuner/"
+    ["blur-my-shell@aunetx"]="/org/gnome/shell/extensions/blur-my-shell/"
+    ["dash-to-dock@micxgx.gmail.com"]="/org/gnome/shell/extensions/dash-to-dock/"
+    ["space-bar@luchrioh"]="/org/gnome/shell/extensions/space-bar/"
+    ["just-perfection-desktop@just-perfection"]="/org/gnome/shell/extensions/just-perfection/"
+    ["Vitals@CoreCoding.com"]="/org/gnome/shell/extensions/vitals/"
+    ["logomenu@aryan_k"]="/org/gnome/shell/extensions/Logo-menu/"
+    ["compiz-windows-effect@hermes83.github.com"]="/org/gnome/shell/extensions/com/github/hermes83/compiz-windows-effect/"
+    ["desktop-cube@schneegans.github.com"]="/org/gnome/shell/extensions/desktop-cube/"
+    ["CoverflowAltTab@palatis.blogspot.com"]="/org/gnome/shell/extensions/coverflowalttab/"
+    ["forge@jmmaranan.com"]="/org/gnome/shell/extensions/forge/"
+    ["tiling-assistant@leleat-on-github"]="/org/gnome/shell/extensions/tiling-assistant/"
+    ["clipboard-indicator@tudmotu.com"]="/org/gnome/shell/extensions/clipboard-indicator/"
+    ["user-theme@gnome-shell-extensions.gcampax.github.com"]="/org/gnome/shell/extensions/user-theme/"
+    ["arch-update@RaphaelRochet"]="/org/gnome/shell/extensions/arch-update/"
+    ["caffeine@patapon.info"]="/org/gnome/shell/extensions/caffeine/"
+    ["gsconnect@andyholmes.github.io"]="/org/gnome/shell/extensions/gsconnect/"
+    ["gnome-ui-tune@itstime.tech"]="/org/gnome/shell/extensions/gnome-ui-tune/"
+)
 
-    if [[ -d "$source" ]]; then
-        mkdir -p "$destination"
-        cp -a "$source/." "$destination/"
-        echo "[BACKUP] $source"
-    fi
-}
+EXT_DIR="$REPO_ROOT/gnome/dconf/extensions"
+mkdir -p "$EXT_DIR"
 
-backup_dconf() {
-    local dconf_path="$1"
-    local destination="$2"
-
-    if ! command -v dconf >/dev/null 2>&1; then
-        echo "[SKIP] dconf is not installed"
-        return
-    fi
-
-    local content
-    content="$(dconf dump "$dconf_path" 2>/dev/null || true)"
-
+for uuid in "${!dconf_paths[@]}"; do
+    path="${dconf_paths[$uuid]}"
+    out_file="$EXT_DIR/$uuid/config.ini"
+    mkdir -p "$(dirname "$out_file")"
+    content="$(dconf dump "$path" 2>/dev/null || true)"
     if [[ -n "$content" ]]; then
-        mkdir -p "$(dirname "$destination")"
-        printf '%s\n' "$content" > "$destination"
-        echo "[BACKUP] dconf $dconf_path"
+        printf '%s\n' "$content" > "$out_file"
+        echo "[DCONF EXTENSION] $uuid"
+    else
+        printf '[/]\n' > "$out_file"
     fi
-}
+done
 
-backup_file \
-    "$HOME/.zshrc" \
-    "$BACKUP_DIR/home/.zshrc"
+# 3. Backup desktop settings
+DESKTOP_DIR="$REPO_ROOT/gnome/dconf/desktop"
+mkdir -p "$DESKTOP_DIR"
 
-backup_file \
-    "$HOME/.p10k.zsh" \
-    "$BACKUP_DIR/home/.p10k.zsh"
+dconf dump /org/gnome/desktop/interface/ > "$DESKTOP_DIR/interface.ini"
+dconf dump /org/gnome/desktop/wm/preferences/ > "$DESKTOP_DIR/wm-preferences.ini"
+dconf dump /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ > "$DESKTOP_DIR/custom-keybindings.ini"
+dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > "$DESKTOP_DIR/media-keys.ini"
 
-backup_dir \
-    "$HOME/.config/zsh" \
-    "$BACKUP_DIR/config/zsh"
-
-backup_dir \
-    "$HOME/.config/nvim" \
-    "$BACKUP_DIR/config/nvim"
-
-backup_dir \
-    "$HOME/.config/lvim" \
-    "$BACKUP_DIR/config/lvim"
-
-backup_dir \
-    "$HOME/.config/gtk-3.0" \
-    "$BACKUP_DIR/config/gtk-3.0"
-
-backup_dir \
-    "$HOME/.config/gtk-4.0" \
-    "$BACKUP_DIR/config/gtk-4.0"
-
-backup_dconf \
-    "/org/gnome/shell/extensions/" \
-    "$BACKUP_DIR/dconf/extensions.ini"
-
-backup_dconf \
-    "/org/gnome/Ptyxis/" \
-    "$BACKUP_DIR/dconf/ptyxis.ini"
-
-backup_dconf \
-    "/org/gnome/desktop/interface/" \
-    "$BACKUP_DIR/dconf/interface.ini"
-
-mkdir -p "$BACKUP_DIR/theme"
-
+# 4. Backup theme info
+THEME_FILE="$REPO_ROOT/theme/settings.ini"
+mkdir -p "$REPO_ROOT/theme"
 {
     printf '[theme]\n'
-    printf 'gtk-theme=%s\n' \
-        "$(gsettings get org.gnome.desktop.interface gtk-theme 2>/dev/null | tr -d "'")"
-    printf 'icon-theme=%s\n' \
-        "$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null | tr -d "'")"
-    printf 'cursor-theme=%s\n' \
-        "$(gsettings get org.gnome.desktop.interface cursor-theme 2>/dev/null | tr -d "'")"
-    printf 'cursor-size=%s\n' \
-        "$(gsettings get org.gnome.desktop.interface cursor-size 2>/dev/null)"
-} > "$BACKUP_DIR/theme/settings.ini"
-
-cat > "$BACKUP_DIR/metadata.txt" <<EOF
-Backup created: $(date '+%Y-%m-%d %H:%M:%S %Z')
-Hostname: $(hostname)
-User: $USER
-Home: $HOME
-Repository: $REPO_ROOT
-EOF
+    printf 'gtk-theme=%s\n' "$(gsettings get org.gnome.desktop.interface gtk-theme 2>/dev/null | tr -d "'")"
+    printf 'icon-theme=%s\n' "$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null | tr -d "'")"
+    printf 'cursor-theme=%s\n' "$(gsettings get org.gnome.desktop.interface cursor-theme 2>/dev/null | tr -d "'")"
+    printf 'cursor-size=%s\n' "$(gsettings get org.gnome.desktop.interface cursor-size 2>/dev/null)"
+    printf 'font-name=%s\n' "$(gsettings get org.gnome.desktop.interface font-name 2>/dev/null | tr -d "'")"
+    printf 'color-scheme=%s\n' "$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | tr -d "'")"
+    printf 'button-layout=%s\n' "$(gsettings get org.gnome.desktop.wm.preferences button-layout 2>/dev/null | tr -d "'")"
+} > "$THEME_FILE"
 
 echo
 echo "Backup completed successfully."
-echo "Saved to:"
-echo "  $BACKUP_DIR"

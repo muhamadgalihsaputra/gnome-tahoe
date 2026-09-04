@@ -1,25 +1,24 @@
-# Shell
+# Terminal and Shell
+ghostty
 zsh
-eza
-fd-find
-fzf
-
-# Terminal / CLI customization
+fastfetch
 btop
 cava
-cmatrix
-fastfetch
-tree
 
-# GNOME / desktop customization
+# System & Utilities
 dconf
-gnome-backgrounds
-gnome-extensions-app
-gnome-font-viewer
-gnome-tweaks
+dconf-editor
+imagemagick
+jq
+curl
+git
 
-# Development environment
-neovim
-
-# Theme build dependency
-sassc
+# GNOME Extensions (Pacman / AUR)
+gnome-shell-extension-dash-to-dock
+gnome-shell-extension-blur-my-shell-git
+gnome-shell-extension-just-perfection-desktop
+gnome-shell-extension-compiz-windows-effect-git
+gnome-shell-extension-compiz-alike-magic-lamp-effect-git
+gnome-shell-extension-desktop-cube-git
+gnome-shell-extension-logo-menu
+gnome-shell-extension-appindicator

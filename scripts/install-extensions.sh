@@ -3,21 +3,29 @@
 set -euo pipefail
 
 EXTENSIONS=(
-    "user-theme@gnome-shell-extensions.gcampax.github.com"
-    "search-light@icedman.github.com"
-    "gnome-ui-tune@itstime.tech"
-    "just-perfection-desktop@just-perfection"
-    "dash2dock-lite@icedman.github.com"
     "openbar@neuromorph"
-    "clipboard-indicator@tudmotu.com"
+    "dynamic-music-pill@andbal"
+    "search-light@icedman.github.com"
     "quick-settings-avatar@d-go"
     "app-grid-tuner@m-lab"
-    "gTile@vibou"
-    "Vitals@CoreCoding.com"
     "blur-my-shell@aunetx"
-    "dynamic-music-pill@andbal"
-    "bluetooth-battery-monitor@v8v88v8v88.com"
-    "background-logo@fedorahosted.org"
+    "dash-to-dock@micxgx.gmail.com"
+    "space-bar@luchrioh"
+    "just-perfection-desktop@just-perfection"
+    "Vitals@CoreCoding.com"
+    "logomenu@aryan_k"
+    "compiz-windows-effect@hermes83.github.com"
+    "compiz-alike-magic-lamp-effect@hermes83.github.com"
+    "desktop-cube@schneegans.github.com"
+    "CoverflowAltTab@palatis.blogspot.com"
+    "forge@jmmaranan.com"
+    "tiling-assistant@leleat-on-github"
+    "clipboard-indicator@tudmotu.com"
+    "user-theme@gnome-shell-extensions.gcampax.github.com"
+    "arch-update@RaphaelRochet"
+    "caffeine@patapon.info"
+    "gsconnect@andyholmes.github.io"
+    "gnome-ui-tune@itstime.tech"
 )
 
 DOWNLOAD_DIR="$(mktemp -d)"
@@ -37,30 +45,23 @@ require_command() {
 
 is_installed() {
     local uuid="$1"
-
-    gnome-extensions list |
-        grep -Fxq "$uuid"
+    gnome-extensions list | grep -Fxq "$uuid"
 }
 
 get_shell_version() {
-    gnome-shell --version |
-        grep -oE '[0-9]+' |
-        head -1
+    gnome-shell --version | grep -oE '[0-9]+' | head -1
 }
 
 get_extension_versions() {
     local uuid="$1"
-
-    curl -fsSL \
-        "https://extensions.gnome.org/api/v1/extensions/${uuid}/versions/?page=1&page_size=100"
+    curl -fsSL "https://extensions.gnome.org/api/v1/extensions/${uuid}/versions/?page=1&page_size=100" || true
 }
 
 find_compatible_version() {
     local json="$1"
     local shell_version="$2"
 
-    jq -r \
-        --arg shell_version "$shell_version" '
+    jq -r --arg shell_version "$shell_version" '
         [
             .results[]
             | select(.status == 2 or .status == 3)
@@ -73,12 +74,11 @@ find_compatible_version() {
             | .version
         ]
         | max // empty
-        ' <<< "$json"
+    ' <<< "$json"
 }
 
 find_latest_version() {
     local json="$1"
-    
     jq -r '
         [
             .results[]
@@ -86,7 +86,7 @@ find_latest_version() {
             | .version
         ]
         | max // empty
-        ' <<< "$json"
+    ' <<< "$json"
 }
 
 download_extension() {
@@ -122,8 +122,8 @@ install_extension() {
     json="$(get_extension_versions "$uuid")"
 
     if [[ -z "$json" ]]; then
-        echo "[FAIL] Could not retrieve extension information"
-        return 1
+        echo "[FAIL] Could not retrieve extension information for $uuid"
+        return 0
     fi
 
     version="$(find_compatible_version "$json" "$shell_version")"
@@ -131,29 +131,41 @@ install_extension() {
     if [[ -z "$version" ]]; then
         echo "[WARN] No officially compatible version found for GNOME $shell_version"
         echo "[FALLBACK] Using latest active version"
-
         version="$(find_latest_version "$json")"
     fi
 
     if [[ -z "$version" ]]; then
         echo "[FAIL] No downloadable version found for $uuid"
-        return 1
+        return 0
     fi
 
     package_file="$DOWNLOAD_DIR/${uuid}.zip"
 
     echo "[DOWNLOAD] $uuid v$version"
-
-    download_extension \
-        "$uuid" \
-        "$version" \
-        "$package_file"
+    if ! download_extension "$uuid" "$version" "$package_file"; then
+        echo "[FAIL] Failed to download $uuid"
+        return 0
+    fi
 
     echo "[INSTALL] $uuid v$version"
+    gnome-extensions install --force "$package_file" 2>/dev/null || true
 
-    gnome-extensions install \
-        --force \
-        "$package_file"
+    # Ensure shell version compatibility patch if needed
+    local target_dir="$HOME/.local/share/gnome-shell/extensions/$uuid"
+    if [[ -f "$target_dir/metadata.json" ]]; then
+        python3 -c "
+import json
+try:
+    with open('$target_dir/metadata.json', 'r') as f:
+        d = json.load(f)
+    if '$shell_version' not in d.get('shell-version', []):
+        d.setdefault('shell-version', []).append('$shell_version')
+        with open('$target_dir/metadata.json', 'w') as f:
+            json.dump(d, f, indent=2)
+except Exception:
+    pass
+" 2>/dev/null || true
+    fi
 
     echo "[OK] $uuid"
 }
@@ -165,7 +177,6 @@ main() {
     require_command gnome-shell
 
     local shell_version
-
     shell_version="$(get_shell_version)"
 
     echo "GNOME Shell version: $shell_version"
@@ -173,10 +184,11 @@ main() {
 
     for uuid in "${EXTENSIONS[@]}"; do
         install_extension "$uuid" "$shell_version"
-        echo
     done
 
+    echo
     echo "Extension installation completed."
+    echo "Please restart or re-login your GNOME session."
 }
 
 main "$@"
