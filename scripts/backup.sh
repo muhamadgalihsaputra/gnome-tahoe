@@ -23,7 +23,17 @@ mkdir -p "$REPO_ROOT/config/ghostty" \
 [[ -d "$HOME/.config/cava" ]] && cp -r "$HOME/.config/cava/"* "$REPO_ROOT/config/cava/" 2>/dev/null || true
 [[ -d "$HOME/.config/gtk-3.0" ]] && cp -r "$HOME/.config/gtk-3.0/"* "$REPO_ROOT/config/gtk-3.0/" 2>/dev/null || true
 [[ -d "$HOME/.config/gtk-4.0" ]] && cp -r "$HOME/.config/gtk-4.0/"* "$REPO_ROOT/config/gtk-4.0/" 2>/dev/null || true
-[[ -f "$HOME/.zshrc" ]] && cp "$HOME/.zshrc" "$REPO_ROOT/config/zsh/.zshrc"
+
+# Sanitize bookmarks and zshrc to avoid hardcoded user home paths
+if [[ -f "$HOME/.config/gtk-3.0/bookmarks" ]]; then
+    sed "s|$HOME|@HOME@|g" "$HOME/.config/gtk-3.0/bookmarks" > "$REPO_ROOT/config/gtk-3.0/bookmarks"
+fi
+if [[ -f "$HOME/.zshrc" ]]; then
+    sed -e "s|$HOME|\$HOME|g" \
+        -e 's|FORG_KEY=sk-[a-zA-Z0-9-]*|FORG_KEY="${FORG_KEY:-}"|g' \
+        -e '/export [A-Z0-9_]*API_KEY="[a-zA-Z0-9_-]*"/d' \
+        "$HOME/.zshrc" > "$REPO_ROOT/config/zsh/.zshrc"
+fi
 [[ -f "$HOME/.p10k.zsh" ]] && cp "$HOME/.p10k.zsh" "$REPO_ROOT/config/zsh/.p10k.zsh"
 
 # 2. Backup dconf extensions
@@ -60,7 +70,7 @@ for uuid in "${!dconf_paths[@]}"; do
     path="${dconf_paths[$uuid]}"
     out_file="$EXT_DIR/$uuid/config.ini"
     mkdir -p "$(dirname "$out_file")"
-    content="$(dconf dump "$path" 2>/dev/null || true)"
+    content="$(dconf dump "$path" 2>/dev/null | sed "s|$HOME|@HOME@|g" || true)"
     if [[ -n "$content" ]]; then
         printf '%s\n' "$content" > "$out_file"
         echo "[DCONF EXTENSION] $uuid"
@@ -73,12 +83,29 @@ done
 DESKTOP_DIR="$REPO_ROOT/gnome/dconf/desktop"
 mkdir -p "$DESKTOP_DIR"
 
-dconf dump /org/gnome/desktop/interface/ > "$DESKTOP_DIR/interface.ini"
-dconf dump /org/gnome/desktop/wm/preferences/ > "$DESKTOP_DIR/wm-preferences.ini"
-dconf dump /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ > "$DESKTOP_DIR/custom-keybindings.ini"
-dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > "$DESKTOP_DIR/media-keys.ini"
+dconf dump /org/gnome/desktop/interface/ | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/interface.ini"
+dconf dump /org/gnome/desktop/wm/preferences/ | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/wm-preferences.ini"
+dconf dump /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/custom-keybindings.ini"
+dconf dump /org/gnome/settings-daemon/plugins/media-keys/ | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/media-keys.ini"
 
-# 4. Backup theme info
+# 4. Backup Flatpak list
+if command -v flatpak >/dev/null 2>&1; then
+    echo "Backing up Flatpak list..."
+    {
+        echo "# Flathub applications"
+        echo
+        flatpak list --app --columns=application
+    } > "$REPO_ROOT/flatpak.txt"
+fi
+
+# 5. Backup & Merge Wallpapers
+if [[ -d "$HOME/Pictures/Wallpapers" ]]; then
+    echo "Merging wallpapers from ~/Pictures/Wallpapers to repo..."
+    mkdir -p "$REPO_ROOT/wallpapers/images"
+    cp -rn "$HOME/Pictures/Wallpapers/"* "$REPO_ROOT/wallpapers/images/" 2>/dev/null || true
+fi
+
+# 6. Backup theme info
 THEME_FILE="$REPO_ROOT/theme/settings.ini"
 mkdir -p "$REPO_ROOT/theme"
 {

@@ -14,4 +14,7 @@
 ## Details
 
 * **Theme & Icons:** MacTahoe-Dark (macOS Tahoe aesthetic for modern GNOME Shell & GTK).
-* **Typography:** Apple San Francisco fonts (SF Pro Display for UI, SF Mono for terminal and code).
+  - GTK Theme upstream: [vinceliuice/MacTahoe-gtk-theme](https://github.com/vinceliuice/MacTahoe-gtk-theme)
+  - Icon Theme upstream: [vinceliuice/MacTahoe-icon-theme](https://github.com/vinceliuice/MacTahoe-icon-theme)
+  - Cursors upstream: [vinceliuice/WhiteSur-cursors](https://github.com/vinceliuice/WhiteSur-cursors)
+* **Typography:** Apple San Francisco fonts (`otf-san-francisco` & `otf-san-francisco-mono` from AUR).

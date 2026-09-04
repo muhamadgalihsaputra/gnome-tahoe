@@ -4,6 +4,19 @@ zsh
 fastfetch
 btop
 cava
+lsd
+fzf
+pokemon-colorscripts-git
+oh-my-zsh-git
+zsh-autosuggestions
+zsh-syntax-highlighting
+zsh-completions
+zsh-history-substring-search
+zsh-theme-powerlevel10k
+
+# Apple San Francisco Fonts (AUR)
+otf-san-francisco
+otf-san-francisco-mono
 
 # System & Utilities
 dconf
@@ -22,3 +35,4 @@ gnome-shell-extension-compiz-alike-magic-lamp-effect-git
 gnome-shell-extension-desktop-cube-git
 gnome-shell-extension-logo-menu
 gnome-shell-extension-appindicator
+

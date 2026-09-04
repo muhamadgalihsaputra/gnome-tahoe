@@ -52,7 +52,7 @@ apply_extensions() {
         fi
 
         echo "[APPLY EXTENSION] $uuid"
-        dconf load "$dconf_path" < "$config"
+        sed "s|@HOME@|$HOME|g" "$config" | dconf load "$dconf_path"
     done
 }
 
@@ -63,21 +63,21 @@ apply_desktop() {
 
     if [[ -f "$DESKTOP_DIR/interface.ini" ]]; then
         echo "[APPLY DESKTOP] interface settings"
-        dconf load /org/gnome/desktop/interface/ < "$DESKTOP_DIR/interface.ini"
+        sed "s|@HOME@|$HOME|g" "$DESKTOP_DIR/interface.ini" | dconf load /org/gnome/desktop/interface/
     fi
 
     if [[ -f "$DESKTOP_DIR/wm-preferences.ini" ]]; then
         echo "[APPLY DESKTOP] window manager preferences"
-        dconf load /org/gnome/desktop/wm/preferences/ < "$DESKTOP_DIR/wm-preferences.ini"
+        sed "s|@HOME@|$HOME|g" "$DESKTOP_DIR/wm-preferences.ini" | dconf load /org/gnome/desktop/wm/preferences/
     fi
 
     if [[ -f "$DESKTOP_DIR/custom-keybindings.ini" ]]; then
         echo "[APPLY DESKTOP] custom keybindings"
-        dconf load /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ < "$DESKTOP_DIR/custom-keybindings.ini"
+        sed "s|@HOME@|$HOME|g" "$DESKTOP_DIR/custom-keybindings.ini" | dconf load /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/
     fi
 
     if [[ -f "$DESKTOP_DIR/media-keys.ini" ]]; then
-        dconf load /org/gnome/settings-daemon/plugins/media-keys/ < "$DESKTOP_DIR/media-keys.ini"
+        sed "s|@HOME@|$HOME|g" "$DESKTOP_DIR/media-keys.ini" | dconf load /org/gnome/settings-daemon/plugins/media-keys/
     fi
 }
 

@@ -82,8 +82,20 @@ restore_dir \
     "$HOME/.config/nvim"
 
 restore_dir \
-    "$LATEST_BACKUP/config/lvim" \
-    "$HOME/.config/lvim"
+    "$LATEST_BACKUP/config/ghostty" \
+    "$HOME/.config/ghostty"
+
+restore_dir \
+    "$LATEST_BACKUP/config/fastfetch" \
+    "$HOME/.config/fastfetch"
+
+restore_dir \
+    "$LATEST_BACKUP/config/btop" \
+    "$HOME/.config/btop"
+
+restore_dir \
+    "$LATEST_BACKUP/config/cava" \
+    "$HOME/.config/cava"
 
 restore_dir \
     "$LATEST_BACKUP/config/gtk-3.0" \
@@ -96,10 +108,6 @@ restore_dir \
 restore_dconf \
     "$LATEST_BACKUP/dconf/extensions.ini" \
     "/org/gnome/shell/extensions/"
-
-restore_dconf \
-    "$LATEST_BACKUP/dconf/ptyxis.ini" \
-    "/org/gnome/Ptyxis/"
 
 restore_dconf \
     "$LATEST_BACKUP/dconf/interface.ini" \

@@ -79,7 +79,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # PNPM
-export PNPM_HOME="/home/galyarder/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 
 # Cargo
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
@@ -112,21 +112,21 @@ alias gp="git push"
 
 # AI Tools & Agents
 alias gpt='codex'
-alias forge='FORG_KEY=sk-fg-v1-f60d3f5a5d6f3a95304380fbc839b077f77167fc0d0fd2ba537dd634d8130598 npx forgecode@latest'
+alias forge='FORG_KEY="${FORG_KEY:-}" npx forgecode@latest'
 alias claude-help='claude-setup-guide'
-alias claude-mem='bun "/home/galyarder/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
-alias hp='/home/galyarder/.local/bin/galyarder-phone'
+alias claude-mem='bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
+alias hp='$HOME/.local/bin/galyarder-phone'
 
 # Updaters & System Maintenance
 alias update="update-all"
 alias update-proxy="$HOME/.local/bin/update-proxy"
 alias update-orca="$HOME/.local/bin/update-orca"
 alias update-codex="$HOME/.local/bin/update-codex"
-alias update-openwebui="/home/galyarder/.local/bin/update-openwebui"
+alias update-openwebui="$HOME/.local/bin/update-openwebui"
 alias openwebui-status="update-openwebui --check"
 alias cleanup="clear-cache"
 alias fix-gnome-exts="$HOME/.local/bin/fix-gnome-exts"
-alias snapshots="/home/galyarder/.local/bin/snapshots"
+alias snapshots="$HOME/.local/bin/snapshots"
 alias refresh-apps="refresh-desktop"
 alias fix-apps="sudo /usr/local/bin/galyarder-desktop-app-patches"
 alias sysinfo="fastfetch 2>/dev/null || neofetch 2>/dev/null || echo System info tool not found"
