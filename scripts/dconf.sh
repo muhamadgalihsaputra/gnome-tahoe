@@ -31,6 +31,11 @@ apply_extensions() {
         ["caffeine@patapon.info"]="/org/gnome/shell/extensions/caffeine/"
         ["gsconnect@andyholmes.github.io"]="/org/gnome/shell/extensions/gsconnect/"
         ["gnome-ui-tune@itstime.tech"]="/org/gnome/shell/extensions/gnome-ui-tune/"
+        ["cryptogold@makev1ch.github.com"]="/org/gnome/shell/extensions/cryptogold/"
+        ["extension-list@tu.berry"]="/org/gnome/shell/extensions/extension-list/"
+        ["thinkpad-red-led@juanmagd.dev"]="/org/gnome/shell/extensions/thinkpad-red-led/"
+        ["wack-lockscreen-clock@rinzler69-wastaken.github.com"]="/org/gnome/shell/extensions/wack-lockscreen-clock/"
+        ["mute-unmute@mcast.gnomext.com"]="/org/gnome/shell/extensions/mute-unmute/"
     )
 
     if ! command -v dconf >/dev/null 2>&1; then
@@ -59,6 +64,11 @@ apply_extensions() {
 apply_desktop() {
     if [[ ! -d "$DESKTOP_DIR" ]]; then
         return
+    fi
+
+    if [[ -f "$DESKTOP_DIR/shell.ini" ]]; then
+        echo "[APPLY DESKTOP] GNOME shell settings & enabled extensions"
+        sed "s|@HOME@|$HOME|g" "$DESKTOP_DIR/shell.ini" | dconf load /org/gnome/shell/
     fi
 
     if [[ -f "$DESKTOP_DIR/interface.ini" ]]; then

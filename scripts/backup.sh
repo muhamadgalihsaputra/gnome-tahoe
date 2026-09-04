@@ -61,6 +61,11 @@ declare -A dconf_paths=(
     ["caffeine@patapon.info"]="/org/gnome/shell/extensions/caffeine/"
     ["gsconnect@andyholmes.github.io"]="/org/gnome/shell/extensions/gsconnect/"
     ["gnome-ui-tune@itstime.tech"]="/org/gnome/shell/extensions/gnome-ui-tune/"
+    ["cryptogold@makev1ch.github.com"]="/org/gnome/shell/extensions/cryptogold/"
+    ["extension-list@tu.berry"]="/org/gnome/shell/extensions/extension-list/"
+    ["thinkpad-red-led@juanmagd.dev"]="/org/gnome/shell/extensions/thinkpad-red-led/"
+    ["wack-lockscreen-clock@rinzler69-wastaken.github.com"]="/org/gnome/shell/extensions/wack-lockscreen-clock/"
+    ["mute-unmute@mcast.gnomext.com"]="/org/gnome/shell/extensions/mute-unmute/"
 )
 
 EXT_DIR="$REPO_ROOT/gnome/dconf/extensions"
@@ -82,6 +87,9 @@ done
 # 3. Backup desktop settings
 DESKTOP_DIR="$REPO_ROOT/gnome/dconf/desktop"
 mkdir -p "$DESKTOP_DIR"
+
+echo "[DCONF DESKTOP] shell settings & enabled extensions"
+dconf dump /org/gnome/shell/ | sed -n '1,/^\[extensions\//p' | head -n -1 | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/shell.ini"
 
 dconf dump /org/gnome/desktop/interface/ | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/interface.ini"
 dconf dump /org/gnome/desktop/wm/preferences/ | sed "s|$HOME|@HOME@|g" > "$DESKTOP_DIR/wm-preferences.ini"

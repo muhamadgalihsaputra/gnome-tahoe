@@ -26,6 +26,12 @@ EXTENSIONS=(
     "caffeine@patapon.info"
     "gsconnect@andyholmes.github.io"
     "gnome-ui-tune@itstime.tech"
+    "rainclock@hugo-sants.github.com"
+    "cryptogold@makev1ch.github.com"
+    "extension-list@tu.berry"
+    "mute-unmute@mcast.gnomext.com"
+    "thinkpad-red-led@juanmagd.dev"
+    "wack-lockscreen-clock@rinzler69-wastaken.github.com"
 )
 
 DOWNLOAD_DIR="$(mktemp -d)"
@@ -185,6 +191,16 @@ main() {
     for uuid in "${EXTENSIONS[@]}"; do
         install_extension "$uuid" "$shell_version"
     done
+
+    # Deploy local custom extensions (MCP bridges, custom tools)
+    local repo_root
+    repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+    if [[ -d "$repo_root/gnome/extensions/local" ]]; then
+        echo
+        echo "Installing local bundled extensions..."
+        mkdir -p "$HOME/.local/share/gnome-shell/extensions"
+        cp -r "$repo_root/gnome/extensions/local/"* "$HOME/.local/share/gnome-shell/extensions/" 2>/dev/null || true
+    fi
 
     echo
     echo "Extension installation completed."

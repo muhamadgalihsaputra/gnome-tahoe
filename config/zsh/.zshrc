@@ -90,7 +90,6 @@ zstyle ':completion:*' menu select
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # --- 7. Environment Variables & API Keys ---
-# Place your private API keys in ~/.secrets (which is not tracked in git)
 [[ -f "$HOME/.secrets" ]] && source "$HOME/.secrets"
 
 # OmniRoute Local Gateway Configuration
