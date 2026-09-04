@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Obsidian
+Exec=@HOME@/.local/bin/obsidian-launch %U
+Terminal=false
+Type=Application
+Icon=md.obsidian.Obsidian
+StartupWMClass=obsidian
+Comment=Obsidian
+MimeType=x-scheme-handler/obsidian;
+Categories=Office;
+X-Flatpak-Tags=proprietary;
+X-Flatpak=md.obsidian.Obsidian

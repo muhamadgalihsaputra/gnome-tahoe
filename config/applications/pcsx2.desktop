@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=PCSX2
+GenericName=PlayStation 2 emulator
+Comment=PlayStation 2 emulator
+TryExec=pcsx2
+Exec=pcsx2 %f
+Icon=pcsx2
+Terminal=false
+StartupNotify=true
+StartupWMClass=pcsx2-qt
+Categories=Game;Emulator

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Wave Terminal
+Comment=An open-source, cross-platform terminal for seamless workflows.(Use system-wide electron)
+Exec=waveterm %U
+Icon=waveterm
+Terminal=false
+StartupNotify=false
+Categories=Utility;
+NoDisplay=true

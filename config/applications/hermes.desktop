@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Hermes
+Comment=Official Hermes Agent Desktop Client
+Exec=@HOME@/.local/bin/hermes-desktop %U
+Icon=hermes
+Terminal=false
+Type=Application
+Categories=Development;
+StartupWMClass=Hermes
+StartupNotify=true
+MimeType=x-scheme-handler/hermes;

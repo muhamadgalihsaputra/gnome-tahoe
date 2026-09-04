@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Name=Waydroid
+Exec=waydroid
+Icon=/usr/share/icons/hicolor/512x512/apps/waydroid.png
+Categories=X-WayDroid-App;Utility;
+Actions=stop;initialize;
+X-Purism-FormFactor=Workstation;Mobile;
+
+[Desktop Action stop]
+Name=Stop Waydroid
+Exec=waydroid session stop
+Icon=/usr/share/icons/hicolor/512x512/apps/waydroid.png
+
+[Desktop Action initialize]
+Name=Initialize Waydroid
+Exec=waydroid init --client

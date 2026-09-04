@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Contacts
+GenericName=Contacts
+Comment=Manage your contacts
+Keywords=contacts;people;address;phone;email;
+Exec=sh -c 'gnome-contacts >/dev/null 2>&1'
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=org.gnome.Contacts
+Categories=Office;ContactManagement;GTK;GNOME;
+NoDisplay=false

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Calculator
+GenericName=Calculator
+Comment=Calculator app
+Keywords=calculator;calc;math;
+Exec=sh -c 'gnome-calculator >/dev/null 2>&1'
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=org.gnome.Calculator
+Categories=Utility;Calculator;GNOME;GTK;
+NoDisplay=false

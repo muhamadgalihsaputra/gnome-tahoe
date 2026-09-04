@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=EA FC 25
+Exec=xdg-open heroic://launch?appName=trWcBpNjc4u2yWyunW1k94&runner=sideload
+Terminal=false
+Type=Application
+Icon=@HOME@/.config/heroic/icons/trWcBpNjc4u2yWyunW1k94.jpg
+Categories=Game;

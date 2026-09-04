@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Windows Presentation Foundation Host
+MimeType=application/x-ms-xbap;
+Exec=env WINEPREFIX="@HOME@/Games/Heroic/Prefixes/default/PES Blue Lock/drive_c/Games/Pro Evolution Soccer 2017" wine start /ProgIDOpen Windows.Xbap %f
+NoDisplay=true
+StartupNotify=true
+Icon=0637_PresentationHost.0

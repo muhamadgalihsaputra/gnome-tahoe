@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Clock
+GenericName=Clock
+Comment=Clocks, alarms, timers, and stopwatch
+Keywords=clock;alarm;timer;stopwatch;time;
+Exec=sh -c 'gnome-clocks >/dev/null 2>&1'
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=org.gnome.clocks
+Categories=Utility;Clock;GTK;GNOME;
+NoDisplay=false

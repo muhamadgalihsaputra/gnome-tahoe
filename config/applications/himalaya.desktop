@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Name=himalaya
+DesktopName=Himalaya
+GenericName=Mail Reader
+Comment=CLI to manage emails
+Terminal=true
+Exec=himalaya %U
+Icon=mail-message
+Categories=Application;Network
+Keywords=email
+MimeType=x-scheme-handler/mailto;message/rfc822
+Actions=Compose
+
+[Desktop Action Compose]
+Name=Compose
+Exec=himalaya message write %U

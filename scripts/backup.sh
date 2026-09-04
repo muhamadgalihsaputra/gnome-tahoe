@@ -127,5 +127,33 @@ mkdir -p "$REPO_ROOT/theme"
     printf 'button-layout=%s\n' "$(gsettings get org.gnome.desktop.wm.preferences button-layout 2>/dev/null | tr -d "'")"
 } > "$THEME_FILE"
 
+# 7. Backup custom application launchers
+if [[ -d "$HOME/.local/share/applications" ]]; then
+    echo "Backing up custom desktop application launchers..."
+    mkdir -p "$REPO_ROOT/config/applications"
+    for f in "$HOME/.local/share/applications"/*.desktop; do
+        [ -f "$f" ] || continue
+        sed "s|$HOME|@HOME@|g" "$f" > "$REPO_ROOT/config/applications/$(basename "$f")"
+    done
+fi
+
+# 8. Backup custom app icons (PNG and SVG only)
+if [[ -d "$HOME/.local/share/icons" ]]; then
+    echo "Backing up custom app icons..."
+    mkdir -p "$REPO_ROOT/config/icons"
+    cp "$HOME/.local/share/icons"/*.png "$HOME/.local/share/icons"/*.svg "$REPO_ROOT/config/icons/" 2>/dev/null || true
+fi
+
+# 9. Backup user desktop scripts
+if [[ -d "$HOME/scripts" ]]; then
+    echo "Backing up user desktop scripts..."
+    mkdir -p "$REPO_ROOT/config/scripts"
+    for f in "$HOME/scripts"/*.sh; do
+        [ -f "$f" ] || continue
+        sed "s|$HOME|@HOME@|g" "$f" > "$REPO_ROOT/config/scripts/$(basename "$f")"
+        chmod +x "$REPO_ROOT/config/scripts/$(basename "$f")"
+    done
+fi
+
 echo
 echo "Backup completed successfully."

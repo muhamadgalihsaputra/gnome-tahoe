@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Cloudflare Zero Trust CLI
+Exec=/usr/bin/warp-cli --accept-tos registration token %u
+NoDisplay=true
+StartupNotify=false
+MimeType=x-scheme-handler/com.cloudflare.warp;

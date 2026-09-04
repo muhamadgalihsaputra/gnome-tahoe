@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galyarder — Systems Architect & Developer</title>
+    <meta name="description" content="Portfolio of Galyarder, a developer building AI + Web3 infrastructure and automation systems." />
+    <meta property="og:title" content="Galyarder — Systems Architect" />
+    <meta property="og:description" content="Engineering intelligent infrastructure for Web3, AI, and automation." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-BCiyZDUd.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BXCzOekQ.css">
+  </head>
+  <body class="dark:bg-gray-950 dark:text-white">
+    <div id="root"></div>
+  </body>
+</html>
