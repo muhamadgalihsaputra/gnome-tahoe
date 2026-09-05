@@ -36,3 +36,4 @@
 | **GSConnect** | `gsconnect@andyholmes.github.io` | EGO | Android smartphone integration |
 | **Arch Update** | `arch-update@RaphaelRochet` | EGO | Pacman / AUR package update notifier |
 | **GNOME UI Tune** | `gnome-ui-tune@itstime.tech` | EGO | UI spacing and widget refinements |
+| **Hanabi Live Wallpaper** | `hanabi-extension@jeffshee.github.io` | Local / Git | Hardware-accelerated video & live wallpaper engine |

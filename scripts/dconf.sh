@@ -36,6 +36,7 @@ apply_extensions() {
         ["thinkpad-red-led@juanmagd.dev"]="/org/gnome/shell/extensions/thinkpad-red-led/"
         ["wack-lockscreen-clock@rinzler69-wastaken.github.com"]="/org/gnome/shell/extensions/wack-lockscreen-clock/"
         ["mute-unmute@mcast.gnomext.com"]="/org/gnome/shell/extensions/mute-unmute/"
+        ["hanabi-extension@jeffshee.github.io"]="/io/github/jeffshee/hanabi-extension/"
     )
 
     if ! command -v dconf >/dev/null 2>&1; then
