@@ -66,6 +66,7 @@ declare -A dconf_paths=(
     ["thinkpad-red-led@juanmagd.dev"]="/org/gnome/shell/extensions/thinkpad-red-led/"
     ["wack-lockscreen-clock@rinzler69-wastaken.github.com"]="/org/gnome/shell/extensions/wack-lockscreen-clock/"
     ["mute-unmute@mcast.gnomext.com"]="/org/gnome/shell/extensions/mute-unmute/"
+    ["hanabi-extension@jeffshee.github.io"]="/io/github/jeffshee/hanabi-extension/"
 )
 
 EXT_DIR="$REPO_ROOT/gnome/dconf/extensions"

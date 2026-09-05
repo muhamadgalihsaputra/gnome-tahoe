@@ -112,7 +112,7 @@
 /* This stylesheet is generated, DO NOT EDIT */
 window.background.csd > dialog-host > widget > widget > box > leaflet list.navigation-sidebar {
   background-image: linear-gradient(to left, rgba(0, 0, 0, 0.06), transparent 6px);
-  background-color: transparent;
+  background-color: color-mix(in srgb, @sidebar_bg_color 96%, transparent);
   box-shadow: none;
   border: none;
 }
@@ -120,7 +120,7 @@ window.background.csd > dialog-host > widget > widget > box > leaflet list.navig
 window.background.csd > dialog-host > widget > widget > box > leaflet > headerbar.titlebar.tweak-titlebar-left, window.background.csd > contents > leaflet.unfolded > box > headerbar,
 window.background.csd > widget > leaflet.unfolded > box > headerbar {
   background-image: linear-gradient(to left, rgba(0, 0, 0, 0.06), transparent 6px);
-  background-color: transparent;
+  background-color: color-mix(in srgb, @sidebar_bg_color 96%, transparent);
   border: none;
 }
 
@@ -135,7 +135,7 @@ window.background.csd > widget > leaflet.unfolded > box > stack > widget > overl
 
 window.background.csd > dialog-host > widget > widget > box > leaflet > box > searchbar > revealer > box, window.background.csd > contents > leaflet.unfolded > box > searchbar > revealer > box,
 window.background.csd > widget > leaflet.unfolded > box > searchbar > revealer > box {
-  background-color: transparent;
+  background-color: color-mix(in srgb, @sidebar_bg_color 96%, transparent);
   border-color: @headerbar_darker_shade_color;
 }
 
@@ -272,7 +272,7 @@ spinbutton.vertical > button:only-child, spinbutton.vertical > text:only-child, 
 }
 
 .background, .background.view {
-  background-color: color-mix(in srgb, @window_bg_color 75%, transparent);
+  background-color: color-mix(in srgb, @window_bg_color 96%, transparent);
 }
 
 .background:backdrop {
@@ -2697,7 +2697,7 @@ headerbar windowhandle box.linked > button:checked {
 }
 
 .tiled headerbar, .tiled headerbar:backdrop, .maximized headerbar, .maximized headerbar:backdrop {
-  border-radius: 24px 24px 0 0;
+  border-radius: 0 0 0 0;
   box-shadow: none;
 }
 
