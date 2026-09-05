@@ -32,6 +32,7 @@ EXTENSIONS=(
     "mute-unmute@mcast.gnomext.com"
     "thinkpad-red-led@juanmagd.dev"
     "wack-lockscreen-clock@rinzler69-wastaken.github.com"
+    "appindicatorsupport@rgcjonas.gmail.com"
 )
 
 DOWNLOAD_DIR="$(mktemp -d)"

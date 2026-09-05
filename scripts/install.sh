@@ -32,6 +32,10 @@ if [[ -d "$REPO_ROOT/wallpapers/images" ]]; then
 fi
 
 echo
+echo "==> Installing GNOME extensions (EGO & local custom)..."
+"$REPO_ROOT/scripts/install-extensions.sh"
+
+echo
 echo "==> Applying GNOME desktop and extension configurations..."
 "$REPO_ROOT/scripts/dconf.sh" all
 
